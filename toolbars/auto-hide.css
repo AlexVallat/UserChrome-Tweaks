@@ -4,23 +4,44 @@
  * Contributor(s): Alex Vallat
  */
 
+/* Tweaking - the minimum tabbar height can be affected by things CSS can't see, including 
+ * OS, DPI, windows system metrics, toolbar density, and other userChrome stylesheets.
+ *
+ * If the web page doesn't line up properly under the bottom of the toolbar, adjust this
+ * value until it does. To find out what the value should be, go to Browser Console (Ctrl+Shift+J)
+ * and enter:
+ *
+ *     document.getElementById("TabsToolbar").getBoundingClientRect().height
+ *
+ * Then replace var(--tabbar-height-estimate) with the value in px. For example:
+ *
+ *     --tabbar-height: 34px;
+ */
+
+#navigator-toolbox {
+  --tabbar-height: var(--tabbar-height-estimate);
+}
+
+/* Used only for FF 64, not needed for 65+ */
+:root[uidensity=compact] { --tab-min-height: 29px; }
+:root:not([uidensity]) { --tab-min-height: 33px; }
+:root[uidensity=touch] { --tab-min-height: 41px; }
+/**/
+
 :root[uidensity=compact] #navigator-toolbox {
   --nav-bar-height: 33px;
-  --tab-min-height: 29px;
 }
 
 :root:not([uidensity]) #navigator-toolbox {
   --nav-bar-height: 39px;
-  --tab-min-height: 33px;
 }
 
 :root[uidensity=touch] #navigator-toolbox {
   --nav-bar-height: 41px;
-  --tab-min-height: 41px;
 }
 
 #navigator-toolbox {
-  --tabbar-height: calc(var(--tab-min-height) + var(--space-above-tabbar));
+  --tabbar-height-estimate: calc(var(--tab-min-height) + var(--space-above-tabbar));
   --trigger-area-height: 5px;
 }
 
@@ -34,8 +55,8 @@
 
 /* Undo add of 4px extra margin on top of the tabs toolbar on Windows 7. */
 /* Note: @media -moz-os-version does not work in userChrome.css (https://bugzilla.mozilla.org/show_bug.cgi?id=1418963) */
-:root[sizemode="normal"][chromehidden~="menubar"] #TabsToolbar,
-:root[sizemode="normal"] #toolbar-menubar[autohide="true"][inactive] + #TabsToolbar {
+:root[sizemode="normal"][chromehidden~="menubar"] #TabsToolbar > .toolbar-items,
+:root[sizemode="normal"] #toolbar-menubar[autohide="true"][inactive] + #TabsToolbar > .toolbar-items {
   padding-top: var(--space-above-tabbar) !important;
 }
 
