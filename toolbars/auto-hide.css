@@ -16,10 +16,21 @@
  * Then replace var(--tabbar-height-estimate) with the value in px. For example:
  *
  *     --tabbar-height: 34px;
+ *
+ * If it lines up when normal, but not when maximized, tweak the --maximized-padding value.
+ * To determine the correct value to use, go to Browser Console (Ctrl+Shift+J)
+ * and enter:
+ *
+ *     getComputedStyle(document.getElementById("titlebar")).paddingTop
+ *
  */
 
 #navigator-toolbox {
   --tabbar-height: var(--tabbar-height-estimate);
+}
+:root[sizemode="maximized"] #navigator-toolbox {
+  --maximized-padding: 8px;
+  --tabbar-height: calc(var(--tabbar-height-estimate) + var(--maximized-padding));
 }
 
 /* Used only for FF 64, not needed for 65+ */
